@@ -1,4 +1,7 @@
 import React from 'react';
+import { throttle } from '../../utils/throttle';
+import { Wrapper } from './components/Wrapper';
+// import throttle from 'lodash/throttle';
 
 import styles from './List.module.css';
 
@@ -6,7 +9,7 @@ type Props = {
   itemsCount: number;
   itemHeight: number;
   windowHeight: number;
-  renderItem: (props: {index: number; style: React.CSSProperties}) => React.ReactNode;
+  renderItem: (props: { index: number; style: React.CSSProperties }) => React.ReactNode;
 }
 
 const List: React.FC<Props> = (props) => {
@@ -38,19 +41,10 @@ const List: React.FC<Props> = (props) => {
     return items;
   }
 
-  
-
-  const onScroll = (e: React.UIEvent) => setScrollTop(e.currentTarget.scrollTop);
-
   return (
-    <div className={styles.wrapper} style={{ height: `${windowHeight}px` }} onScroll={onScroll}>
-      <div
-        className={styles.inner}
-        style={{ height: `${innerHeight}px` }}
-      >
+    <Wrapper handleScroll={setScrollTop} layoutHeight={innerHeight} windowHeight={windowHeight}>
         {getItems()}
-      </div>
-    </div>
+    </Wrapper>
   );
 }
 
