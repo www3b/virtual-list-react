@@ -1,4 +1,7 @@
 import React from 'react';
+import { throttle } from '../../utils/throttle';
+import { Wrapper } from './components/Wrapper';
+// import throttle from 'lodash/throttle';
 
 import { Wrapper } from './components/Wrapper';
 
