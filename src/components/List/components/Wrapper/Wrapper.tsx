@@ -14,6 +14,7 @@ const Wrapper: React.FC<React.PropsWithChildren<Props>> = (props) => {
   const onScroll = throttle((e: React.UIEvent) => {
     props.handleScroll(e.currentTarget.scrollTop);
   }, 100);
+
   return (
     <div className={styles.wrapper} style={{ height: `${props.windowHeight}px` }} onScroll={onScroll}>
       <div
