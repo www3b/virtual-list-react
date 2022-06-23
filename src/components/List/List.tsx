@@ -2,48 +2,54 @@ import React from 'react';
 
 import { Wrapper } from './components/Wrapper';
 
-const DEFAULT_OFFSET = 2;
+const BUFFER_SIZE = 2;
 
 type Props = {
-  itemsCount: number;
-  itemHeight: number;
+  rowsCount: number;
+  rowHeight: number;
   windowHeight: number;
-  renderItem: (props: { index: number; style: React.CSSProperties }) => React.ReactNode;
-  offset?: number;
+  bufferSize?: number;
+  renderItem: React.FC<any>;
 }
 
 const List: React.FC<Props> = (props) => {
   const [scrollTop, setScrollTop] = React.useState(0);
+  const [renderItems, setRenderItems] = React.useState<any>([]);
+  
+  React.useEffect(() => {
+    prepareItems();
+  }, [scrollTop]);
 
-  const { itemsCount, itemHeight, renderItem, windowHeight, offset = DEFAULT_OFFSET } = props;
+  const { rowsCount, rowHeight, renderItem, windowHeight, bufferSize = BUFFER_SIZE } = props;
 
-  const innerHeight = itemsCount * itemHeight;
-  const startIndex = Math.floor(scrollTop / itemHeight) - offset;
+  const innerHeight = rowsCount * rowHeight;
+  const startIndex = Math.floor(scrollTop / rowHeight) - bufferSize;
   const endIndex = Math.min(
-    itemsCount - 1,
-    Math.floor((scrollTop + windowHeight) / itemHeight)
-  ) + offset;
+    rowsCount - 1,
+    Math.floor((scrollTop + windowHeight) / rowHeight) + bufferSize
+  );
 
-  const getItems = () => {
+  const prepareItems = () => {
     const items = [];
     for (let i = startIndex; i <= endIndex; i++) {
-      items.push(
-        renderItem({
-          index: i,
-          style: {
-            position: "absolute",
-            top: `${i * itemHeight}px`,
-            width: "100%"
-          }
-        })
-      );
+      items.push({
+        index: i,
+        style: {
+          position: "absolute",
+          top: `${i * rowHeight}px`,
+          width: "100%",
+          height: "auto",
+        }
+      });
     }
-    return items;
+    setRenderItems(items);
   }
+
+  const RenderRow = renderItem;
 
   return (
     <Wrapper handleScroll={setScrollTop} layoutHeight={innerHeight} windowHeight={windowHeight}>
-        {getItems()}
+      {renderItems.map((item: any) => <RenderRow index={item.index} style={item.style} />)}
     </Wrapper>
   );
 }

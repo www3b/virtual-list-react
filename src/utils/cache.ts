@@ -1,29 +1,31 @@
+type CacheKey = string | number;
+
 interface ICache {
-  get(key: string): any;
-  set(key: string, value: any): void;
-  delete(key: string): void;
+  get(key: CacheKey): any;
+  set(key: CacheKey, value: any): void;
+  delete(key: CacheKey): void;
   clear(): void;
 }
 
 class CacheImpl implements ICache {
-  private _cache: Record<string, unknown> = {};
+  private _cache: Record<CacheKey, any> = {};
 
-  get(key: string) {
+  get(key: CacheKey): any {
     if (!this.contains(key)) {
-      throw new Error("The provided key is not stored in the cache.")
+      return undefined;
     }
     return this._cache[key];
   }
-  set(key: string, value: any): void {
+  set(key: CacheKey, value: any): void {
     this._cache[key] = value;
   }
-  delete(key: string): void {
+  delete(key: CacheKey): void {
     delete this._cache[key];
   }
   clear(): void {
     this._cache = {};
   }
-  contains(key: string): boolean {
+  contains(key: CacheKey): boolean {
     return this._cache.hasOwnProperty(key);
   }
 }

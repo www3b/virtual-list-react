@@ -1,17 +1,19 @@
 import React from 'react';
 
+import cache from './utils/cache';
+
 import { Item } from './components/Item';
 import { List } from './components/List';
 
 const App: React.FC = () => {
-  const items = new Array(100000).fill(1);
+  const items = new Array(10000).fill(1);
   return (
     <div className="App">
       <List
-        itemHeight={30}
-        itemsCount={items.length}
+        rowHeight={50}
+        rowsCount={items.length}
         renderItem={Item}
-        windowHeight={100}
+        windowHeight={300}
       />
     </div>
   );

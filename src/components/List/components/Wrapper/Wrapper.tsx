@@ -4,13 +4,13 @@ import { throttle } from '../../../../utils/throttle';
 
 import styles from './Wrapper.module.css';
 
-type Props = {
+type Props = React.PropsWithChildren<{
   windowHeight: number;
   layoutHeight: number;
   handleScroll: (offset: number) => void;
-}
+}>;
 
-const Wrapper: React.FC<React.PropsWithChildren<Props>> = (props) => {
+const Wrapper: React.FC<Props> = (props) => {
   const onScroll = throttle((e: React.UIEvent) => {
     props.handleScroll(e.currentTarget.scrollTop);
   }, 100);
