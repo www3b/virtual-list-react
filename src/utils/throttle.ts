@@ -1,9 +1,7 @@
-type CallbackType = (...arg: any[]) => any;
-
-export function throttle<T extends CallbackType>(fn: T, delay: number): CallbackType {
+export function throttle<T extends Function>(fn: T, delay: number): T {
   let lastCall = 0;
 
-  return function (...args) {
+  function callable(...args: any[]) {
     const now = (new Date()).getTime();
     if (lastCall !== 0 && (now - lastCall) < delay) {
       return;
@@ -12,4 +10,5 @@ export function throttle<T extends CallbackType>(fn: T, delay: number): Callback
 
     fn(...args);
   }
+  return callable as any;
 };
