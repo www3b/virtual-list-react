@@ -1,7 +1,5 @@
 import React from 'react';
 
-import cache from './utils/cache';
-
 import { Item } from './components/Item';
 import { List } from './components/List';
 
@@ -10,7 +8,9 @@ const App: React.FC = () => {
   const styles = {
     display: 'flex',
     flexDirection: 'column',
-    height: '100vh',
+    height: '400px',
+    width: '800px',
+    margin: '0 auto',
   } as const;
   return (
     <div className="App" style={styles}>
