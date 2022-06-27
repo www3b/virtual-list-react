@@ -56,7 +56,7 @@ const List: React.FC<Props> = (props) => {
       layoutHeight={innerHeight}
       windowHeight={innerHeight}
     >
-      {renderItems.map((item: any) => <RenderRow index={item.index} style={item.style} />)}
+      {renderItems.map((item: any) => <RenderRow key={item.index} index={item.index} style={item.style} />)}
     </Wrapper>
   );
 }

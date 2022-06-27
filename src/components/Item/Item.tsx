@@ -1,16 +1,16 @@
 import React from 'react';
+import { withMeasure, WithMeasureProps } from '../WithMeasure';
 
 import styles from './Item.module.css';
 
-export type Props = {
+export type Props = WithMeasureProps & {
   index: string | number;
-  style: React.CSSProperties;
 }
 
 const Item: React.FC<Props> = (props) => (
-  <div className={styles.item} key={props.index} style={props.style}>
+  <div key={props.index} className={styles.item}>
     Item {props.index}
   </div>
 );
 
-export default Item;
+export default withMeasure(Item);

@@ -7,7 +7,7 @@ type SizeData = {
   element: Element;
 };
 
-export const useMeasurement = () => {
+export function useMeasurement(): [SizeData | undefined, Function, Element | null] {
   const [size, setSize] = useState<SizeData>();
 
   const measureItem = useCallback(({ contentRect, target }: ResizeObserverEntry) => {
