@@ -1,4 +1,5 @@
 import React from 'react';
+import { useScroll } from '../../hooks/useScroll';
 
 import { Wrapper } from './components/Wrapper';
 
@@ -6,28 +7,28 @@ const BUFFER_SIZE = 2;
 
 type Props = {
   rowsCount: number;
-  rowHeight: number;
-  windowHeight: number;
-  bufferSize?: number;
   renderItem: React.FC<any>;
+  rowHeight?: number;
+  bufferSize?: number;
 }
 
 const List: React.FC<Props> = (props) => {
   const [scrollTop, setScrollTop] = React.useState(0);
   const [renderItems, setRenderItems] = React.useState<any>([]);
-  
+  const [scrollMonitor, windowHeight] = useScroll(setScrollTop);
+
   React.useEffect(() => {
     prepareItems();
-  }, [scrollTop]);
+  }, [scrollTop, windowHeight]);
 
-  const { rowsCount, rowHeight, renderItem, windowHeight, bufferSize = BUFFER_SIZE } = props;
+  const { rowsCount, rowHeight = 50, renderItem, bufferSize = BUFFER_SIZE } = props;
 
   const innerHeight = rowsCount * rowHeight;
   const startIndex = Math.floor(scrollTop / rowHeight) - bufferSize;
   const endIndex = Math.min(
     rowsCount - 1,
     Math.floor((scrollTop + windowHeight) / rowHeight) + bufferSize
-  );
+  );  
 
   const prepareItems = () => {
     const items = [];
@@ -38,17 +39,23 @@ const List: React.FC<Props> = (props) => {
           position: "absolute",
           top: `${i * rowHeight}px`,
           width: "100%",
-          height: "auto",
+          height: `${rowHeight}px`,
+          backgroundColor: i % 2 ? 'rgb(233, 252, 230)' : 'rgb(233, 243, 255)',
         }
       });
-    }
+    }    
     setRenderItems(items);
   }
 
   const RenderRow = renderItem;
 
   return (
-    <Wrapper handleScroll={setScrollTop} layoutHeight={innerHeight} windowHeight={windowHeight}>
+    <Wrapper
+      ref={scrollMonitor as React.Ref<HTMLDivElement>}
+      handleScroll={setScrollTop}
+      layoutHeight={innerHeight}
+      windowHeight={innerHeight}
+    >
       {renderItems.map((item: any) => <RenderRow index={item.index} style={item.style} />)}
     </Wrapper>
   );

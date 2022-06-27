@@ -1,11 +1,12 @@
 .wrapper {
-  overflow-y: scroll;
-  width: 600px;
+  height: 100%;
+  flex: 1;
   position: relative;
-  margin: 0 auto;
-  border: 1px solid #515151;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .inner {
-  position: relative;
+  height: 0;
+  overflow: visible;
 }

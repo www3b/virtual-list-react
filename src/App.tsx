@@ -7,13 +7,16 @@ import { List } from './components/List';
 
 const App: React.FC = () => {
   const items = new Array(10000).fill(1);
+  const styles = {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100vh',
+  } as const;
   return (
-    <div className="App">
+    <div className="App" style={styles}>
       <List
-        rowHeight={50}
         rowsCount={items.length}
         renderItem={Item}
-        windowHeight={300}
       />
     </div>
   );
