@@ -1,40 +1,48 @@
 import React from 'react';
 import { useScroll } from '../../hooks/useScroll';
+import { Item } from '../Item';
 
 import { Wrapper } from './components/Wrapper';
 
 const BUFFER_SIZE = 2;
 
-type Props = {
-  rowsCount: number;
-  renderItem: React.FC<any>;
+type Props<T> = {
+  items: T[];
+  renderMethod: (data: T) => React.ReactNode;
   rowHeight?: number;
   bufferSize?: number;
 }
 
-const List: React.FC<Props> = (props) => {
+type WrappedItem<T> = {
+  index: number;
+  data: T;
+  style: React.CSSProperties;
+}
+
+const VirtualList = <T extends {}>(props: Props<T>) => {
   const [scrollTop, setScrollTop] = React.useState(0);
-  const [renderItems, setRenderItems] = React.useState<any>([]);
+  const [renderItems, setRenderItems] = React.useState<WrappedItem<T>[]>([] as any);
   const [scrollMonitor, windowHeight] = useScroll(setScrollTop);
 
   React.useEffect(() => {
     prepareItems();
   }, [scrollTop, windowHeight]);
 
-  const { rowsCount, rowHeight = 50, renderItem, bufferSize = BUFFER_SIZE } = props;
-
+  const { items, rowHeight = 50, renderMethod, bufferSize = BUFFER_SIZE } = props;
+  const rowsCount = items.length;
   const innerHeight = rowsCount * rowHeight;
   const startIndex = Math.floor(scrollTop / rowHeight) - bufferSize;
   const endIndex = Math.min(
     rowsCount - 1,
     Math.floor((scrollTop + windowHeight) / rowHeight) + bufferSize
-  );  
+  );
 
   const prepareItems = () => {
-    const items = [];
-    for (let i = startIndex; i <= endIndex; i++) {
-      items.push({
+    const rows: WrappedItem<T>[] = [];
+    for (let i = startIndex >= 0 ? startIndex : 0; i <= endIndex; i++) {
+      rows.push({
         index: i,
+        data: items[i],
         style: {
           position: "absolute",
           top: `${i * rowHeight}px`,
@@ -43,11 +51,9 @@ const List: React.FC<Props> = (props) => {
           backgroundColor: i % 2 ? 'rgb(233, 252, 230)' : 'rgb(233, 243, 255)',
         }
       });
-    }    
-    setRenderItems(items);
+    }
+    setRenderItems(rows);
   }
-
-  const RenderRow = renderItem;
 
   return (
     <Wrapper
@@ -56,9 +62,13 @@ const List: React.FC<Props> = (props) => {
       layoutHeight={innerHeight}
       windowHeight={innerHeight}
     >
-      {renderItems.map((item: any) => <RenderRow key={item.index} index={item.index} style={item.style} />)}
+      {renderItems.map((item) => (
+        <Item id={item.index} key={item.index} style={item.style}>
+          {renderMethod(item.data)}
+        </Item>
+      ))}
     </Wrapper>
   );
 }
 
-export default List
+export default VirtualList;

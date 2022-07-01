@@ -1,10 +1,17 @@
 import React from 'react';
 
-import { Item } from './components/Item';
-import { List } from './components/List';
+import { VirtualList } from './components/VirtualList';
+
+type Item = {
+  index: number;
+};
+
+const items: Item[] = [];
+for (let i = 0; i <= 10000; i++) {
+  items.push({ index: i });
+}
 
 const App: React.FC = () => {
-  const items = new Array(10000).fill(1);
   const styles = {
     display: 'flex',
     flexDirection: 'column',
@@ -14,9 +21,11 @@ const App: React.FC = () => {
   } as const;
   return (
     <div className="App" style={styles}>
-      <List
-        rowsCount={items.length}
-        renderItem={Item}
+      <VirtualList<Item>
+        items={items}
+        renderMethod={(data) => (
+          <div style={{ height: data.index % 2 ? '100px' : '50px' }}>Item {data.index}</div>
+        )}
       />
     </div>
   );

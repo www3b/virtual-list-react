@@ -32,7 +32,6 @@ export function withMeasure<T extends WithMeasureProps = WithMeasureProps>(
       context.changed()
     }
 
-    console.log(size);
     return (
       <div key={measureId} style={style} ref={attach as any}>
         <WrappedComponent {...(props as T)} />
