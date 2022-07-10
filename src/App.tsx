@@ -19,12 +19,20 @@ const App: React.FC = () => {
     width: '800px',
     margin: '0 auto',
   } as const;
+  const itemStyles = {
+    display: 'flex',
+    justifyContent: 'center',
+    height: '100%',
+    alignItems: 'center',
+  } as const;
   return (
     <div className="App" style={styles}>
       <VirtualList<Item>
         items={items}
         renderMethod={(data) => (
-          <div style={{ height: data.index % 2 ? '100px' : '50px' }}>Item {data.index}</div>
+          <div style={{ ...itemStyles, background: data.index % 2 ? 'rgb(29, 141, 106)' : 'rgb(227, 180, 5)' }}>
+            Item {data.index}
+          </div>
         )}
       />
     </div>

@@ -8,7 +8,7 @@ const BUFFER_SIZE = 2;
 
 type Props<T> = {
   items: T[];
-  renderMethod: (data: T) => React.ReactNode;
+  renderMethod: (data: T) => React.ReactElement;
   rowHeight?: number;
   bufferSize?: number;
 }
@@ -48,7 +48,6 @@ const VirtualList = <T extends {}>(props: Props<T>) => {
           top: `${i * rowHeight}px`,
           width: "100%",
           height: `${rowHeight}px`,
-          backgroundColor: i % 2 ? 'rgb(233, 252, 230)' : 'rgb(233, 243, 255)',
         }
       });
     }

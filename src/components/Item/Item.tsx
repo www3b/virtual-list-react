@@ -1,12 +1,15 @@
 import React from 'react';
-import { withMeasure, WithMeasureProps } from '../WithMeasure';
 
-export type Props = React.PropsWithChildren<WithMeasureProps>;
+type Props = {
+  children: React.ReactElement;
+  style: React.CSSProperties;
+  id: number;
+}
 
-const Item: React.FC<Props> = (props) => (
-  <div>
+const Item = (props: Props) => (
+  <div key={props.id} style={props.style}>
     {props.children}
   </div>
 );
 
-export default withMeasure(Item);
+export default Item;
